@@ -1,5 +1,8 @@
 <script>
+    import { onMount } from 'svelte';
+    import auth from '../../authService.js';
     import { isAuthenticated, user } from '../../store.js';
+    let auth0Client;
     function login() {
         auth.loginWithPopup(auth0Client);
     }
@@ -7,6 +10,12 @@
     function logout() {
         auth.logout(auth0Client);
     }
+    onMount(async () => {
+        auth0Client = await auth.createClient();
+
+        isAuthenticated.set(await auth0Client.isAuthenticated());
+        user.set(await auth0Client.getUser());
+    });
 </script>
 
 <header>
@@ -25,11 +34,11 @@
                 <ul class="navbar-nav float-right">
                     {#if $isAuthenticated}
                         <li class="nav-item">
-                            <a class="nav-link" href="/#" on:click={logout}>Log Out</a>
+                            <button class="nav-link" on:click={logout}>Log Out</button>
                         </li>
                     {:else}
                         <li class="nav-item">
-                            <a class="nav-link" href="/#" on:click={login}>Log In</a>
+                            <button class="nav-link" on:click={login}>Log In</button>
                         </li>
                     {/if}
                 </ul>
