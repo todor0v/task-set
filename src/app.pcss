@@ -13,12 +13,13 @@
     --color-secondary: hsl(217deg 48% 58%);
     --dark-one: hsl(0deg 0% 12%);
     --dark-two: hsl(0deg 0% 10%);
+    --color-white: hsl(0deg 0% 100%);
 }
 
 body {
-    color: var(--color-primary);
+    /* color: var(--color-white); */
     font-weight: 300;
-    background-color: var(--dark-one);
+    /* background-color: var(--dark-one); */
     transition: background-color var(--transition);
 }
 
@@ -50,11 +51,7 @@ body {
     font-family: 'Nunito', sans-serif;
     scroll-behavior: smooth;
 }
-@media (hover: hover) and (pointer: fine) {
-    html {
-        width: calc(100vw - 17px);
-    }
-}
+
 body {
     line-height: 1.5;
     -webkit-font-smoothing: antialiased;
@@ -101,13 +98,8 @@ p,
 .main-content {
     flex-grow: 1;
     flex-shrink: 0;
-    padding-top: 90px;
 }
-@media (max-width: 640px) {
-    .main-content {
-        margin-bottom: 40px;
-    }
-}
+
 .main-footer {
     flex-shrink: 0;
 }
