@@ -1,4 +1,4 @@
-import adapter from '@sveltejs/adapter-auto';
+import vercel from '@sveltejs/adapter-vercel';
 import preprocess from 'svelte-preprocess';
 /** @type {import('@sveltejs/kit').Config} */
 export default {
@@ -11,7 +11,7 @@ export default {
 				'process.env': process.env,
 			},
 		},
-		adapter: adapter(),
+		adapter: vercel(),
 		target: '#svelte'
 	}
 };
