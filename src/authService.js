@@ -6,6 +6,8 @@ async function createClient() {
     let auth0Client = await createAuth0Client({
         domain: config.domain,
         client_id: config.clientId,
+        useRefreshTokens: true,
+        cacheLocation: 'localstorage'
     });
 
     return auth0Client;

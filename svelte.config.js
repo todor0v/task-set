@@ -12,6 +12,6 @@ export default {
             },
         },
         adapter: vercel(),
-        target: '#svelte',
+        target: '#svelte'
     },
 };

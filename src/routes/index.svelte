@@ -2,40 +2,41 @@
     import { onMount } from 'svelte';
     import auth from '../authService.js';
     import TaskItem from '../components/TaskItem.svelte';
-    import { isAuthenticated, tasks, user, user_tasks } from '../store.js';
+    import { isAuthenticated, tasks, user } from '../store.js';
     let auth0Client;
+    let user_tasks = [];
     let newTask;
-    function genRandom(length = 7) {
-        var chars = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
-        var result = '';
-        for (var i = length; i > 0; --i) result += chars[Math.round(Math.random() * (chars.length - 1))];
-        return result;
-    }
-    function addItem() {
-        let newTaskObject = {
-            id: genRandom(),
-            description: newTask,
-            completed: false,
-            user: $user.email,
-        };
 
-        console.log(newTaskObject);
-
-        let updatedTasks = [...$tasks, newTaskObject];
-
-        tasks.set(updatedTasks);
-
-        newTask = '';
-    }
-    function login() {
-        auth.loginWithPopup(auth0Client);
-    }
     onMount(async () => {
         auth0Client = await auth.createClient();
 
         isAuthenticated.set(await auth0Client.isAuthenticated());
         user.set(await auth0Client.getUser());
+        const res = await fetch(`/todos/${$user.name}.json`);
+        const data = await res.json();
+        user_tasks = data;
+        console.log(user_tasks);
     });
+
+    function login() {
+        auth.loginWithPopup(auth0Client);
+    }
+
+    async function addItem() {
+        const res = await fetch('/todos.json', {
+            method: 'POST',
+            headers: { accept: 'text/plain' },
+            body: JSON.stringify({ description: newTask, completed: false, user: $user.email }),
+        });
+
+        const newTaskRes = await res.json();
+
+        let updatedTasks = [...$tasks, newTaskRes];
+
+        tasks.set(updatedTasks);
+
+        newTask = '';
+    }
 </script>
 
 <svelte:head>
@@ -65,7 +66,8 @@
         <div class="row">
             <div class="col-md-6">
                 <ul class="list-group">
-                    {#each $user_tasks as item (item.id)}
+                    1
+                    {#each user_tasks as item}
                         <TaskItem task={item} />
                     {/each}
                 </ul>
