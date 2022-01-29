@@ -1,6 +1,10 @@
 
 import { api } from "./_api";
 
-export const get = (request) => {
-  return api(request);
+export const get = (event) => {
+  if (event.request.headers.get('cookie') !== null && event.request.headers.get('cookie').includes('authenticated=true')) return api(event);
+  return {
+    headers: { Location: '/' },
+    status: 308
+  }
 }

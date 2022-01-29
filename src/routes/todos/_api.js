@@ -32,7 +32,6 @@ export const api = async (event, data) => {
           id: event.params.id
         }
       })
-      // todos = todos.filter(todo => todo.id !== request.params.id)
       status = 200;
       break;
     case "PATCH":
