@@ -21,6 +21,10 @@
         auth.loginWithPopup(auth0Client);
     }
 
+    function handleKeypress(e) {
+        if (e.key === 'Enter') addItem();
+    }
+
     async function getTasks(user) {
         try {
             const res = await fetch(`/todos/${user?.name}.json`);
@@ -82,7 +86,7 @@
                 </ul>
             </div>
             <div class="col-md-6">
-                <input class="form-control" bind:value={newTask} placeholder="Enter New Task" />
+                <input class="form-control" bind:value={newTask} on:keypress={handleKeypress} placeholder="Enter New Task" />
                 {#if $error.text}
                     <p class="error">{$error.text}</p>
                 {/if}
