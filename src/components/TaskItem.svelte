@@ -1,14 +1,14 @@
 <script>
     export let task = {};
+    import { tasks } from '../store.js';
     let isChecked;
-    let deleted;
 
     const deleteTask = async () => {
-        const res = await fetch(`/todos/${task.id}.json`, {
+        await fetch(`/todos/${task.id}.json`, {
             method: 'DELETE',
             headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
         });
-        deleted = true;
+        $tasks = $tasks.filter((t) => t.id !== task.id);
     };
 
     const taskDone = async () => {
@@ -25,13 +25,11 @@
 </script>
 
 <main>
-    {#if !deleted}
-        <li class="list-group-item">
-            <input type="checkbox" class="form-check-input" id="exampleCheck1" bind:checked={isChecked} on:change={(e) => taskDone(e)} />
-            <span class:completed={isChecked}>{task.description}</span>
-            <button on:click={deleteTask}>X</button>
-        </li>
-    {/if}
+    <li class="list-group-item">
+        <input type="checkbox" class="form-check-input" id="exampleCheck1" bind:checked={isChecked} on:change={(e) => taskDone(e)} />
+        <span class:completed={isChecked}>{task.description}</span>
+        <button on:click={deleteTask}>X</button>
+    </li>
 </main>
 
 <style>

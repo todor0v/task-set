@@ -2,9 +2,8 @@
     import { onMount } from 'svelte';
     import auth from '../authService.js';
     import TaskItem from '../components/TaskItem.svelte';
-    import { error, isAuthenticated, user } from '../store.js';
+    import { error, isAuthenticated, tasks, user } from '../store.js';
     let auth0Client;
-    let user_tasks = [];
     let newTask;
 
     $: if ($user && $user.name) {
@@ -28,7 +27,7 @@
     async function getTasks(user) {
         try {
             const res = await fetch(`/todos/${user?.name}.json`);
-            user_tasks = await res.json();
+            $tasks = await res.json();
         } catch (_error) {
             console.error(_error);
         }
@@ -44,7 +43,7 @@
 
             const updatedTasks = await fetch(`/todos/${$user.name}.json`);
             const updatedTasksData = await updatedTasks.json();
-            user_tasks = updatedTasksData;
+            $tasks = updatedTasksData;
             newTask = '';
             $error.text = '';
         } else {
@@ -80,7 +79,7 @@
         <div class="row">
             <div class="col-md-6">
                 <ul class="list-group">
-                    {#each user_tasks as item}
+                    {#each $tasks as item}
                         <TaskItem task={item} />
                     {/each}
                 </ul>

@@ -13,7 +13,8 @@ module.exports = {
 		node: true
 	},
 	rules: {
-		"no-unused-vars": 'off',
+		"no-unused-vars": "off",
+		"sort-imports": "off",
 		"unused-imports/no-unused-imports": "off",
 	}
 };
