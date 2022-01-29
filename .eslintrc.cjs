@@ -11,5 +11,9 @@ module.exports = {
 		browser: true,
 		es2017: true,
 		node: true
+	},
+	rules: {
+		"no-unused-vars": 'off',
+		"unused-imports/no-unused-imports": "off",
 	}
 };
