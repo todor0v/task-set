@@ -2,9 +2,9 @@
     import { onMount } from 'svelte';
     import auth from '../authService.js';
     import TaskItem from '../components/TaskItem.svelte';
-    import { error, isAuthenticated, tasks, user } from '../store.js';
+    import { error,isAuthenticated,newTask,tasks,user } from '../store.js';
     let auth0Client;
-    let newTask;
+    let taskInput;
 
     $: if ($user && $user.name) {
         getTasks($user);
@@ -34,18 +34,17 @@
     }
 
     async function addItem() {
-        if (newTask) {
-            await fetch('/todos.json', {
+        if ($newTask) {
+            taskInput.value = '';
+            const updatedTask = await fetch('/todos.json', {
                 method: 'POST',
                 headers: { accept: 'text/plain' },
-                body: JSON.stringify({ description: newTask, completed: false, user: $user.email }),
+                body: JSON.stringify({ description: $newTask, completed: false, user: $user.email }),
             });
-
-            const updatedTasks = await fetch(`/todos/${$user.name}.json`);
-            const updatedTasksData = await updatedTasks.json();
-            $tasks = updatedTasksData;
-            newTask = '';
+            const updatedTaskData = await updatedTask.json();
+            $tasks = [...$tasks, updatedTaskData];
             $error.text = '';
+
         } else {
             $error.text = 'You cannot create an empty task';
         }
@@ -78,14 +77,16 @@
     <div class="container" id="main-application">
         <div class="row">
             <div class="col-md-6">
-                <ul class="list-group">
-                    {#each $tasks as item}
-                        <TaskItem task={item} />
-                    {/each}
-                </ul>
+                {#if $tasks.length}
+                    <ul class="list-group">
+                        {#each $tasks as item}
+                            <TaskItem task={item} />
+                        {/each}
+                    </ul>
+                {/if}
             </div>
             <div class="col-md-6">
-                <input class="form-control" bind:value={newTask} on:keypress={handleKeypress} placeholder="Enter New Task" />
+                <input class="form-control" bind:value={$newTask} bind:this={taskInput} on:keypress={handleKeypress} placeholder="Enter New Task" />
                 {#if $error.text}
                     <p class="error">{$error.text}</p>
                 {/if}

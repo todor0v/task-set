@@ -1,8 +1,9 @@
 <script>
     import { onMount } from 'svelte';
     import auth from '../../authService.js';
-    import { isAuthenticated, user } from '../../store.js';
+    import { isAuthenticated,user } from '../../store.js';
     let auth0Client;
+    let toggled = false;
     function login() {
         auth.loginWithPopup(auth0Client);
     }
@@ -15,19 +16,20 @@
 
         isAuthenticated.set(await auth0Client.isAuthenticated());
         user.set(await auth0Client.getUser());
+        console.log($user);
     });
 </script>
 
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="/#">Task Manager</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <button on:click={() => {toggled = !toggled}} class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon" />
         </button>
-        <div class="collapse navbar-collapse" id="navbarText">
+        <div class="collapse navbar-collapse {toggled === false ? '' : 'show'}" id="navbarText">
             <div class="navbar-nav mr-auto user-details">
                 {#if $isAuthenticated}
-                    <span class="text-white">&nbsp;&nbsp;{$user.name} ({$user.email})</span>
+                    <span class="text-white">{$user.email}</span>
                 {:else}<span>&nbsp;</span>{/if}
             </div>
             <span class="navbar-text">
@@ -46,3 +48,13 @@
         </div>
     </nav>
 </header>
+
+<style type="scss">
+    .navbar-collapse {
+        flex-wrap: wrap;
+        justify-content: space-between;
+    }
+    .navbar-collapse.show {
+        display: flex;
+    }
+</style>
