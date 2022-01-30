@@ -1,7 +1,7 @@
 <script>
     import { onMount } from 'svelte';
     import auth from '../../authService.js';
-    import { isAuthenticated,user } from '../../store.js';
+    import { isAuthenticated, user } from '../../store.js';
     let auth0Client;
     let toggled = false;
     function login() {
@@ -23,7 +23,18 @@
 <header>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <a class="navbar-brand" href="/#">Task Manager</a>
-        <button on:click={() => {toggled = !toggled}} class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
+        <button
+            on:click={() => {
+                toggled = !toggled;
+            }}
+            class="navbar-toggler"
+            type="button"
+            data-toggle="collapse"
+            data-target="#navbarText"
+            aria-controls="navbarText"
+            aria-expanded="false"
+            aria-label="Toggle navigation"
+        >
             <span class="navbar-toggler-icon" />
         </button>
         <div class="collapse navbar-collapse {toggled === false ? '' : 'show'}" id="navbarText">

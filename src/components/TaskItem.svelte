@@ -18,16 +18,15 @@
             body: JSON.stringify({ completed: task.completed }),
         });
     };
-
 </script>
 
 <main>
     <li class="list-group-item">
-        <label for="task_{task.id}" class="check-radio {task.completed ? 'completed': ''}">
-            <input type="checkbox" class="check-radio__input" id="task_{task.id}" on:change={(e) => taskDone(e)}/>
+        <label for="task_{task.id}" class="check-radio {task.completed ? 'completed' : ''}">
+            <input type="checkbox" class="check-radio__input" id="task_{task.id}" on:change={(e) => taskDone(e)} />
             <span class="check-radio__element">
                 <span class="check-radio__element-text">{task.description}</span>
-              </span>
+            </span>
         </label>
         <button on:click={deleteTask}>X</button>
     </li>
@@ -38,7 +37,7 @@
         display: block;
         position: relative;
         --icon-size: 28px;
-        --icon-url: url(./static/checkbox.svg);
+        --icon-url: url(./checkbox.svg);
 
         &__input {
             position: absolute;
@@ -48,7 +47,7 @@
         &__element {
             font-size: 12px;
             line-height: 1.33;
-            color: rgba(30,42,38,.8);
+            color: rgba(30, 42, 38, 0.8);
             padding-left: 36px;
             width: 100%;
             position: relative;
@@ -58,28 +57,28 @@
         }
 
         &__element:before {
-            content: "";
+            content: '';
             background-color: var(--color-white);
             position: absolute;
             transition: all var(--transition);
             left: 0;
             width: 24px;
             height: 24px;
-            border: 1px solid rgba(30,42,38,.8);
+            border: 1px solid rgba(30, 42, 38, 0.8);
             box-shadow: 0 0 0 2px transparent;
             top: 0;
             border-radius: 4px;
         }
 
-       .completed &__element:before {
+        .completed &__element:before {
             box-shadow: 0 0 0 2px var(--color-white);
-            filter: drop-shadow(0 2px 8px rgba(24,43,37,.2));
+            filter: drop-shadow(0 2px 8px rgba(24, 43, 37, 0.2));
             background-color: var(--color-white);
             border-color: var(--color-secondary);
         }
 
         &__element:after {
-            content: "";
+            content: '';
             background-image: var(--icon-url);
             width: var(--icon-size);
             height: var(--icon-size);
@@ -100,7 +99,7 @@
 
         &__element-text {
             font-size: 16px;
-            color: rgba(30,42,38,.8);
+            color: rgba(30, 42, 38, 0.8);
         }
     }
 </style>

@@ -2,7 +2,7 @@
     import { onMount } from 'svelte';
     import auth from '../authService.js';
     import TaskItem from '../components/TaskItem.svelte';
-    import { error,isAuthenticated,newTask,tasks,user } from '../store.js';
+    import { error, isAuthenticated, newTask, tasks, user } from '../store.js';
     let auth0Client;
     let taskInput;
 
@@ -44,7 +44,6 @@
             const updatedTaskData = await updatedTask.json();
             $tasks = [...$tasks, updatedTaskData];
             $error.text = '';
-
         } else {
             $error.text = 'You cannot create an empty task';
         }
