@@ -15,6 +15,6 @@ module.exports = {
 	rules: {
 		"no-unused-vars": "off",
 		"sort-imports": "off",
-		"unused-imports/no-unused-imports": "off",
+		"no-unused-imports": "off"
 	}
 };

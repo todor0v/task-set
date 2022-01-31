@@ -15,7 +15,9 @@
 <Header />
 
 <main class="main-content">
-    <slot />
+    <div class="wrapper">
+        <slot />
+    </div>
 </main>
 
 <Footer />

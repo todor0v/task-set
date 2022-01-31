@@ -56,42 +56,38 @@
 
 <!-- Application -->
 {#if !$isAuthenticated}
-    <div class="container mt-5">
-        <div class="row">
-            <div class="col-md-10 offset-md-1">
-                <div class="jumbotron">
-                    <h1 class="display-4">Task Management made Easy!</h1>
-                    <p class="lead">Instructions</p>
-                    <ul>
-                        <li>Login to start &#128272;</li>
-                        <li>Create Tasks &#128221;</li>
-                        <li>Tick off completed tasks &#9989;</li>
-                    </ul>
-                    <a class="btn btn-primary btn-lg mr-auto ml-auto" href="/#" role="button" on:click={login}>Log In</a>
-                </div>
-            </div>
-        </div>
-    </div>
+    <!-- <a class="btn btn-primary btn-lg mr-auto ml-auto" href="/" role="button" on:click={login}>Log In</a> -->
 {:else}
-    <div class="container" id="main-application">
-        <div class="row">
-            <div class="col-md-6">
-                {#if $tasks.length}
-                    <ul class="list-group">
-                        {#each $tasks as item}
-                            <TaskItem task={item} />
-                        {/each}
-                    </ul>
-                {/if}
-            </div>
-            <div class="col-md-6">
-                <input class="form-control" bind:value={$newTask} bind:this={taskInput} on:keypress={handleKeypress} placeholder="Enter New Task" />
-                {#if $error.text}
-                    <p class="error">{$error.text}</p>
-                {/if}
-                <br />
-                <button type="button" class="btn btn-primary" on:click={addItem}>Add Task</button>
-            </div>
+    <div class="task-form">
+        <div class="task-form__box">
+            <input class="task-form__input" bind:value={$newTask} bind:this={taskInput} on:keypress={handleKeypress} placeholder="Enter New Task" />
+            <button type="button" class="button" on:click={addItem}>Add Task</button>
         </div>
+        {#if $error.text}
+            <p class="error">{$error.text}</p>
+        {/if}
     </div>
+    {#if $tasks.length}
+        <ul class="task-list">
+            {#each $tasks as item}
+                <TaskItem task={item} />
+            {/each}
+        </ul>
+    {/if}
 {/if}
+
+<style type="scss">
+    .task-form {
+        margin-bottom: 24px;
+        &__input {
+            width: 100%;
+            max-width: 280px;
+            border-radius: 8px;
+            border: 1px solid var(--color-grey-2);
+            padding: 5px 10px;
+        }
+    }
+    .task-list {
+        padding: 0;
+    }
+</style>
