@@ -1,18 +1,22 @@
 <script>
     import { onMount } from 'svelte';
     import auth from '../../authService.js';
+    import { clickOutside } from '../../helper/clickOutside';
     // import BurgerButton from '../../components/BurgerButton.svelte';
     import { isAuthenticated, user } from '../../store.js';
     let auth0Client;
     let userToggled = false;
     let toggled = false;
-    function login() {
+    const login = () => {
         auth.loginWithPopup(auth0Client);
-    }
+    };
 
-    function logout() {
+    const logout = () => {
         auth.logout(auth0Client);
-    }
+    };
+    const closePopup = () => {
+        userToggled = false;
+    };
     onMount(async () => {
         auth0Client = await auth.createClient();
 
@@ -36,7 +40,7 @@
                 <h2 class="visuallyhidden">Main Menu</h2>
                 <ul class="main-nav__list" role="menubar" aria-hidden="false">
                     {#if $isAuthenticated}
-                        <li class="main-nav__item main-nav__item--sub">
+                        <li class="main-nav__item main-nav__item--sub" use:clickOutside on:click_outside={closePopup}>
                             <button
                                 class="user"
                                 on:click={() => {
@@ -80,6 +84,7 @@
 <style type="scss">
     .main-header {
         padding: 10px 0;
+        margin-bottom: 40px;
         &__content {
             display: flex;
             align-items: center;

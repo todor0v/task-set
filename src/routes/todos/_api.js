@@ -41,7 +41,7 @@ export const api = async (event, data) => {
         },
         data: {
           completed: data.completed,
-          // description: data.description
+          description: data.description
         }
       })
       status = 200;

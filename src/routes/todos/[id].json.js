@@ -11,7 +11,7 @@ export const del = async (event) => {
 export const patch = async (event) => {
   const body = await event.request.json();
   if (event.request.headers.get('cookie')?.includes('authenticated=true')) return api(event, {
-    // description: body.description,
+    description: body.description,
     // user: body.user,
     completed: body.completed,
     id: body.id

@@ -16,13 +16,13 @@
         user.set(await auth0Client.getUser());
     });
 
-    function login() {
+    const login = () => {
         auth.loginWithPopup(auth0Client);
-    }
+    };
 
-    function handleKeypress(e) {
+    const handleKeypress = (e) => {
         if (e.key === 'Enter') addItem();
-    }
+    };
 
     async function getTasks(user) {
         try {
@@ -44,6 +44,7 @@
             const updatedTaskData = await updatedTask.json();
             $tasks = [...$tasks, updatedTaskData];
             $error.text = '';
+            $newTask = '';
         } else {
             $error.text = 'You cannot create an empty task';
         }
@@ -60,8 +61,13 @@
 {:else}
     <div class="task-form">
         <div class="task-form__box">
-            <input class="task-form__input" bind:value={$newTask} bind:this={taskInput} on:keypress={handleKeypress} placeholder="Enter New Task" />
-            <button type="button" class="button" on:click={addItem}>Add Task</button>
+            <input class="task-form__input" bind:value={$newTask} bind:this={taskInput} on:keypress={handleKeypress} placeholder="What do you want to do?" />
+            <button type="button" class="task-form__button" on:click={addItem} aria-label="Add Task">
+                <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
+                    <title>Add</title>
+                    <path fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" d="M256 112v288M400 256H112" />
+                </svg>
+            </button>
         </div>
         {#if $error.text}
             <p class="error">{$error.text}</p>
@@ -79,12 +85,27 @@
 <style type="scss">
     .task-form {
         margin-bottom: 24px;
+        &__box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
         &__input {
             width: 100%;
             max-width: 280px;
             border-radius: 8px;
             border: 1px solid var(--color-grey-2);
-            padding: 5px 10px;
+            padding: 7px 10px 5px;
+            margin-left: 24px;
+        }
+        &__button {
+            width: 24px;
+            height: 24px;
+        }
+        .error {
+            text-align: center;
+            margin-top: 2px;
         }
     }
     .task-list {

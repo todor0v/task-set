@@ -1,6 +1,7 @@
 <script>
     export let task = {};
     import { tasks } from '../store.js';
+    let timeout = null;
 
     const deleteTask = async () => {
         $tasks = $tasks.filter((t) => t.id !== task.id);
@@ -18,22 +19,48 @@
             body: JSON.stringify({ completed: task.completed }),
         });
     };
+
+    const editTask = (e) => {
+        clearTimeout(timeout);
+        task.description = e.currentTarget.textContent;
+        timeout = setTimeout(async () => {
+            await fetch(`/todos/${task.id}.json`, {
+                method: 'PATCH',
+                headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
+                body: JSON.stringify({ description: task.description }),
+            });
+        }, 1000);
+    };
 </script>
 
 <li class="task-list__item">
     <label for="task_{task.id}" class="check-radio {task.completed ? 'completed' : ''}">
         <input type="checkbox" class="check-radio__input" id="task_{task.id}" on:change={(e) => taskDone(e)} />
-        <span class="check-radio__element">
-            <span class="check-radio__element-text">{task.description}</span>
-        </span>
+        <span class="check-radio__element" />
     </label>
-    <button on:click={deleteTask}>X</button>
+    <span class="task-list__item-text" contenteditable="true" on:input={editTask}>{task.description}</span>
+    <button class="task-list__item-delete" on:click={deleteTask} aria-label="Delete Task">
+        <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
+            <title>Trash</title>
+            <path d="M112 112l20 320c.95 18.49 14.4 32 32 32h184c17.67 0 30.87-13.51 32-32l20-320" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" />
+            <path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" d="M80 112h352" />
+            <path
+                d="M192 112V72h0a23.93 23.93 0 0124-24h80a23.93 23.93 0 0124 24h0v40M256 176v224M184 176l8 224M328 176l-8 224"
+                fill="none"
+                stroke="currentColor"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                stroke-width="32"
+            />
+        </svg>
+    </button>
 </li>
 
 <style type="scss">
     .check-radio {
         display: block;
         position: relative;
+        margin-right: 10px;
         --icon-size: 28px;
         --icon-url: url(./checkbox.svg);
 
@@ -43,15 +70,11 @@
         }
 
         &__element {
-            font-size: 12px;
-            line-height: 1.33;
-            color: var(--color-grey-1);
-            padding-left: 36px;
-            width: 100%;
             position: relative;
-            min-height: 24px;
+            height: 24px;
             display: flex;
             align-items: center;
+            width: 24px;
         }
 
         &__element:before {
@@ -94,26 +117,59 @@
             opacity: 1;
             visibility: visible;
         }
-
-        &__element-text {
-            font-size: 16px;
-            margin-bottom: -2px;
-        }
     }
     .task-list {
         &__item {
+            margin: 0 auto;
+            position: relative;
             display: flex;
             align-items: center;
-            justify-content: space-between;
+            justify-content: flex-start;
             max-width: 280px;
             border: 1px solid var(--color-grey-2);
             padding: 9px;
             border-radius: 14px;
-            overflow: hidden;
             list-style: none;
             margin-bottom: 16px;
             &:last-child {
                 margin-bottom: 0;
+            }
+            @media (hover: hover) and (pointer: fine) {
+                &:hover .task-list__item-delete {
+                    opacity: 1;
+                    visibility: visible;
+                }
+            }
+            &:before {
+                content: '';
+                position: absolute;
+                top: 0;
+                bottom: 0;
+                right: 0;
+                width: 15px;
+                transform: translateX(100%);
+            }
+        }
+        &__item-text {
+            font-size: 12px;
+            line-height: 1.33;
+            color: var(--color-grey-1);
+            margin-top: 1px;
+            outline: none;
+        }
+        &__item-delete {
+            will-change: transform;
+            width: 18px;
+            height: 18px;
+            position: absolute;
+            right: -5px;
+            transform: translateX(100%);
+            opacity: 1;
+            visibility: visible;
+            transition: opacity var(--transition), visiblity var(--transition);
+            @media (hover: hover) and (pointer: fine) {
+                opacity: 0;
+                visibility: hidden;
             }
         }
     }
