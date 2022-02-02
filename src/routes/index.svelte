@@ -98,6 +98,10 @@
             border: 1px solid var(--color-grey-2);
             padding: 7px 10px 5px;
             margin-left: 24px;
+            outline: none;
+            @media (hover: hover) and (pointer: fine) {
+                outline: initial;
+            }
         }
         &__button {
             width: 24px;
