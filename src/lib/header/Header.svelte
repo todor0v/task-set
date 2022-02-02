@@ -144,8 +144,8 @@
         text-decoration: none;
         .icon {
             flex-shrink: 0;
-            max-width: 44px;
-            max-height: 44px;
+            width: 44px;
+            height: 44px;
         }
         &__text {
             color: var(--color-grey-1);
