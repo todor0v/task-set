@@ -6,7 +6,7 @@
     import { isAuthenticated, user } from '../../store.js';
     let auth0Client;
     let userToggled = false;
-    let toggled = false;
+
     const login = () => {
         auth.loginWithPopup(auth0Client);
     };
@@ -36,7 +36,7 @@
                 <span class="brand__text">TaskSet</span>
             </a>
             <!-- <BurgerButton /> -->
-            <nav class="main-nav {toggled === false ? '' : 'show'}" aria-label="Main Menu">
+            <nav class="main-nav" aria-label="Main Menu">
                 <h2 class="visuallyhidden">Main Menu</h2>
                 <ul class="main-nav__list" role="menubar" aria-hidden="false">
                     {#if $isAuthenticated}
@@ -52,7 +52,7 @@
                                     <path d="M42 44C42 34.0589 33.9411 26 24 26C14.0589 26 6 34.0589 6 44" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
                                 </svg>
                             </button>
-                            <ul class="main-subnav {userToggled === false ? '' : 'is-active'}">
+                            <ul class="main-subnav" class:is-active={userToggled}>
                                 <li class="main-subnav__item">
                                     <button class="main-nav__link main-nav__link--button" on:click={logout}>Log Out</button>
                                 </li>
@@ -152,13 +152,6 @@
             margin-left: 2px;
         }
     }
-    // .navbar-collapse {
-    //     flex-wrap: wrap;
-    //     justify-content: space-between;
-    // }
-    // .navbar-collapse.show {
-    //     display: flex;
-    // }
     .user {
         border-radius: 50%;
         border: 2px solid var(--color-grey-1);

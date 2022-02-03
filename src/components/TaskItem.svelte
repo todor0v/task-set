@@ -1,14 +1,28 @@
 <script>
     export let task = {};
+    import { fly } from 'svelte/transition';
     import { tasks } from '../store.js';
     let timeout = null;
+    let preventeDeletionPopup = false;
+    let deleteTimeout;
 
-    const deleteTask = async () => {
+    const deleteData = async () => {
+        preventeDeletionPopup = false;
         $tasks = $tasks.filter((t) => t.id !== task.id);
         await fetch(`/todos/${task.id}.json`, {
             method: 'DELETE',
             headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
         });
+    };
+
+    const preventDeletionProcess = () => {
+        clearTimeout(deleteTimeout);
+        preventeDeletionPopup = false;
+    };
+
+    const deleteTask = (e) => {
+        preventeDeletionPopup = true;
+        deleteTimeout = setTimeout(deleteData, 4000);
     };
 
     const taskDone = async () => {
@@ -33,15 +47,14 @@
     };
 </script>
 
-<li class="task-list__item">
-    <label for="task_{task.id}" class="check-radio {task.completed ? 'completed' : ''}">
-        <input type="checkbox" class="check-radio__input" id="task_{task.id}" on:change={(e) => taskDone(e)} />
+<li class="task-list__item" class:hidden={preventeDeletionPopup} in:fly={{ x: 200, duration: 400 }}>
+    <label for="task_{task.id}" class="check-radio" class:completed={task.completed}>
+        <input type="checkbox" class="check-radio__input" tabindex="0" id="task_{task.id}" on:change={(e) => taskDone(e)} />
         <span class="check-radio__element" />
     </label>
-    <span class="task-list__item-text" contenteditable="true" on:input={editTask}>{task.description}</span>
+    <span class="task-list__item-text" contenteditable="true" on:input={editTask} tabindex="0">{task.description}</span>
     <button class="task-list__item-delete" on:click={deleteTask} aria-label="Delete Task">
-        <svg xmlns="http://www.w3.org/2000/svg" class="ionicon" viewBox="0 0 512 512">
-            <title>Trash</title>
+        <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 512 512">
             <path d="M112 112l20 320c.95 18.49 14.4 32 32 32h184c17.67 0 30.87-13.51 32-32l20-320" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" />
             <path stroke="currentColor" stroke-linecap="round" stroke-miterlimit="10" stroke-width="32" d="M80 112h352" />
             <path
@@ -55,6 +68,18 @@
         </svg>
     </button>
 </li>
+{#if preventeDeletionPopup}
+    <div class="restore-box" in:fly={{ y: 200, duration: 400 }} out:fly={{ y: 200, duration: 600 }}>
+        <span class="restore-box__text">Task Deleted Successfully</span>
+        <button class="restore-box__button" on:click={preventDeletionProcess} aria-label="Restore Task">
+            <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24">
+                <path
+                    d="M12 0c-3.31 0-6.291 1.353-8.459 3.522l-2.48-2.48-1.061 7.341 7.437-.966-2.489-2.488c1.808-1.808 4.299-2.929 7.052-2.929 5.514 0 10 4.486 10 10s-4.486 10-10 10c-3.872 0-7.229-2.216-8.89-5.443l-1.717 1.046c2.012 3.803 6.005 6.397 10.607 6.397 6.627 0 12-5.373 12-12s-5.373-12-12-12z"
+                />
+            </svg>
+        </button>
+    </div>
+{/if}
 
 <style type="scss">
     .check-radio {
@@ -67,6 +92,12 @@
         &__input {
             position: absolute;
             opacity: 0;
+            &:focus + .check-radio__element:before {
+                box-shadow: 0 0 0 2px var(--color-white);
+                filter: drop-shadow(0 1px 3px rgba(131, 131, 131, 0.2));
+                background-color: var(--color-white);
+                border-color: var(--color-secondary);
+            }
         }
 
         &__element {
@@ -140,24 +171,32 @@
                     visibility: visible;
                 }
             }
+            &:focus-within {
+                outline: 1px solid var(--color-grey-2);
+            }
             &:before {
                 content: '';
                 position: absolute;
                 top: 0;
                 bottom: 0;
                 right: 0;
-                width: 15px;
+                width: 30px;
                 transform: translateX(100%);
+            }
+            &.hidden {
+                display: none;
             }
         }
         &__item-text {
-            font-size: 12px;
+            font-size: 16px;
             line-height: 1.33;
             color: var(--color-grey-1);
             margin-top: 1px;
             outline: none;
+            width: 100%;
         }
         &__item-delete {
+            cursor: pointer;
             will-change: transform;
             width: 18px;
             height: 18px;
@@ -171,6 +210,34 @@
                 opacity: 0;
                 visibility: hidden;
             }
+            &:after {
+                content: '';
+                position: absolute;
+                inset: 50%;
+                padding: 20px 15px;
+                transform: translate(-50%, -50%);
+            }
+        }
+    }
+    .restore-box {
+        display: flex;
+        align-items: center;
+        gap: 10px 14px;
+        background-color: var(--color-grey-3);
+        border: 1px solid var(--color-grey-2);
+        padding: 12px 14px 10px;
+        border-radius: 6px;
+        position: fixed;
+        left: 50%;
+        transform: translateX(-50%);
+        bottom: 40px;
+        &__button {
+            cursor: pointer;
+            width: 24px;
+            height: 24px;
+        }
+        &__button .icon {
+            fill: var(--color-primary);
         }
     }
 </style>
