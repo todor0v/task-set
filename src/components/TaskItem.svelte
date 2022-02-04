@@ -70,14 +70,8 @@
 </li>
 {#if preventeDeletionPopup}
     <div class="restore-box" in:fly={{ y: 200, duration: 400 }} out:fly={{ y: 200, duration: 600 }}>
-        <span class="restore-box__text">Task Deleted Successfully</span>
-        <button class="restore-box__button" on:click={preventDeletionProcess} aria-label="Restore Task">
-            <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 24 24">
-                <path
-                    d="M12 0c-3.31 0-6.291 1.353-8.459 3.522l-2.48-2.48-1.061 7.341 7.437-.966-2.489-2.488c1.808-1.808 4.299-2.929 7.052-2.929 5.514 0 10 4.486 10 10s-4.486 10-10 10c-3.872 0-7.229-2.216-8.89-5.443l-1.717 1.046c2.012 3.803 6.005 6.397 10.607 6.397 6.627 0 12-5.373 12-12s-5.373-12-12-12z"
-                />
-            </svg>
-        </button>
+        <span class="restore-box__text">Task Deleted</span>
+        <button class="restore-box__button" on:click={preventDeletionProcess} aria-label="Restore Task">Undo</button>
     </div>
 {/if}
 
@@ -223,21 +217,16 @@
         display: flex;
         align-items: center;
         gap: 10px 14px;
-        background-color: var(--color-grey-3);
-        border: 1px solid var(--color-grey-2);
-        padding: 12px 14px 10px;
-        border-radius: 6px;
         position: fixed;
         left: 50%;
         transform: translateX(-50%);
         bottom: 40px;
         &__button {
+            background-color: var(--color-grey-3);
+            border: 1px solid var(--color-grey-2);
+            padding: 7px 10px 6px;
+            border-radius: 6px;
             cursor: pointer;
-            width: 24px;
-            height: 24px;
-        }
-        &__button .icon {
-            fill: var(--color-primary);
         }
     }
 </style>
