@@ -11,7 +11,6 @@ export default {
                 'process.env': process.env,
             },
         },
-        adapter: vercel(),
-        target: '#svelte'
+        adapter: vercel()
     },
 };
