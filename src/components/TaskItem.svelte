@@ -72,7 +72,7 @@
     };
 </script>
 
-<li class="task-list__item" class:hidden={preventeDeletionPopup} in:fly={{ x: 200, duration: 400 }}>
+<li class="task-list__item" class:hidden={preventeDeletionPopup} in:fly={{ x: 200, duration: 400 }} use:clickOutside on:click_outside={closePopup}>
     <label for="task_{task.id}" class="check-radio" class:completed={task.completed}>
         <input type="checkbox" class="check-radio__input" tabindex="0" id="task_{task.id}" on:change={(e) => taskDone(e)} />
         <span class="check-radio__element" />
@@ -83,7 +83,7 @@
             <path d="M7.381 17.762a2.38 2.38 0 1 0 0-4.762 2.38 2.38 0 0 0 0 4.762zM15 17.762A2.381 2.381 0 1 0 15 13a2.381 2.381 0 0 0 0 4.762zM22.619 17.762a2.381 2.381 0 1 0 0-4.762 2.381 2.381 0 0 0 0 4.762z"></path>
         </svg>
     </button>
-    <div class="task-list__options" class:is-active={showOptions} use:clickOutside on:click_outside={closePopup}>
+    <div class="task-list__options" class:is-active={showOptions}>
         <div class="task-list__option">
             <button class="task-list__option-btn" on:click={deleteTask}>
                 <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 512 512">
@@ -246,11 +246,14 @@
         &__more {
             cursor: pointer;
             position: absolute;
-            right: -10px;
+            right: 0;
             transform: translateX(100%);
             opacity: 1;
             visibility: visible;
             transition: opacity var(--transition), visiblity var(--transition);
+            top: 0;
+            bottom: 0;
+            padding: 0 8px;
             .icon {
                 width: 18px;
                 height: 18px;
