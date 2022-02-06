@@ -5,6 +5,10 @@
     let timeout = null;
     let preventeDeletionPopup = false;
     let deleteTimeout;
+    const shareData = {
+        title: 'Check out this task:',
+        text: task.description,
+    };
 
     const deleteData = async () => {
         preventeDeletionPopup = false;
@@ -13,6 +17,14 @@
             method: 'DELETE',
             headers: { Accept: 'application/json', 'Content-Type': 'application/json' },
         });
+    };
+
+    const shareTask = async () => {
+        try {
+            await navigator.share(shareData);
+        } catch (error) {
+            console.warn(error);
+        }
     };
 
     const preventDeletionProcess = () => {
@@ -53,6 +65,7 @@
         <span class="check-radio__element" />
     </label>
     <span class="task-list__item-text" contenteditable="true" on:input={editTask} tabindex="0">{task.description}</span>
+    <button on:click={shareTask}>Share</button>
     <button class="task-list__item-delete" on:click={deleteTask} aria-label="Delete Task">
         <svg xmlns="http://www.w3.org/2000/svg" class="icon" viewBox="0 0 512 512">
             <path d="M112 112l20 320c.95 18.49 14.4 32 32 32h184c17.67 0 30.87-13.51 32-32l20-320" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" stroke-width="32" />
