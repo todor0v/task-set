@@ -4,7 +4,7 @@
     import Popup from '../components/Popup.svelte';
     import { clickOutside } from '../helper/clickOutside';
     import { tasks } from '../store.js';
-    let timeout = null, preventeDeletionPopup = false, deleteTimeout, showOptions = false, taskCopied = false;
+    let timeout = null, preventeDeletionPopup = false, deleteTimeout, showOptions = false, taskCopied = false, taskShared = false;
 
     const deleteData = async () => {
         preventeDeletionPopup = false;
@@ -16,11 +16,15 @@
     };
 
     const shareTask = async () => {
+        showOptions = false;
         try {
-            await navigator.share({
-                text: task.description
-            });
+            await navigator.share({text: task.description});
+            taskShared = true;
+            setTimeout(() => {
+                taskShared = false;
+            }, 2000);
         } catch (error) {
+            taskShared = false;
             console.warn(error);
         }
     };
@@ -35,10 +39,10 @@
     };
 
     const copyTask = () => {
+        showOptions = false;
         if (navigator.clipboard) {
             navigator.clipboard.writeText(task.description);
             taskCopied = true;
-            showOptions = false;
             setTimeout(() => {
                 taskCopied = false;
             }, 2000);
@@ -46,6 +50,7 @@
     }
 
     const deleteTask = (e) => {
+        showOptions = false;
         preventeDeletionPopup = true;
         deleteTimeout = setTimeout(deleteData, 4000);
     };
@@ -125,7 +130,9 @@
 
 {#if taskCopied}
     <Popup text="Task Copied"/>
-{:else if  preventeDeletionPopup}
+{:else if taskShared}
+    <Popup text="Task Shared"/>
+{:else if preventeDeletionPopup}
     <Popup info_text="Task Deleted" text="Undo" button={true} buttonAction={preventDeletionProcess}/>
 {/if}
 
