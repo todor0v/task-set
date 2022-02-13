@@ -7,7 +7,7 @@
     import { error,isAuthenticated,tasks,user } from '../store.js';
     let auth0Client, value, taskInput;
     let image = {
-        src: 'static/task-girl.svg',
+        src: 'https://res.cloudinary.com/dunzfvymb/image/upload/v1644749994/task-girl_l5ew26.svg',
         alt: 'Drawing of all Lord of the Rings characters',
         aspect_ratio: '877/600',
         width: '590px',
@@ -15,7 +15,7 @@
     };
 
     let image2 = {
-        src: 'static/girl-stairs.svg',
+        src: 'https://res.cloudinary.com/dunzfvymb/image/upload/v1644749994/girl-stairs_voxice.svg',
         alt: 'Drawing of all Lord of the Rings characters',
         aspect_ratio: '765/832',
         width: '430px',
