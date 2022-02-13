@@ -142,7 +142,7 @@
         position: relative;
         margin-right: 10px;
         --icon-size: 28px;
-        --icon-url: url(./checkbox.svg);
+        --icon-url: url(../../../checkbox.svg);
 
         &__input {
             position: absolute;
