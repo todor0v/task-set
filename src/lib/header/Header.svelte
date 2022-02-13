@@ -25,7 +25,7 @@
     });
 </script>
 
-<header class="main-header">
+<header class={$isAuthenticated ? 'main-header main-header--logged-in' : 'main-header'}>
     <div class="wrapper">
         <div class="main-header__content">
             <a class="brand" sveltekit:prefetch href="/">
@@ -79,10 +79,13 @@
 <style type="scss">
     .main-header {
         padding: 10px 0;
-        margin-bottom: 80px;
+        margin-bottom: 40px;
         &__content {
             display: flex;
             align-items: center;
+        }
+        &--logged-in {
+            margin-bottom: 80px;
         }
     }
     .main-nav {

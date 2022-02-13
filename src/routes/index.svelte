@@ -189,7 +189,7 @@
     }
     :global(.home-layout__top .aspect-ratio) {
         position: absolute;
-        right: -125px;
+        right: -115px;
         top: -125px;
         @media screen and (max-width: 1440px) {
             --width: 460px !important;
