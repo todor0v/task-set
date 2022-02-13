@@ -1,15 +1,30 @@
 <script>
     import { onMount } from 'svelte';
+    import { fly } from 'svelte/transition';
     import auth from '../authService.js';
+    import ImageLoader from '../components/Image/ImageLoader.svelte';
     import TaskItem from '../components/TaskItem.svelte';
-    import { error, isAuthenticated, tasks, user } from '../store.js';
-    let auth0Client;
-    let value;
-    let taskInput;
+    import { error,isAuthenticated,tasks,user } from '../store.js';
+    let auth0Client, value, taskInput;
+    let image = {
+        src: 'static/task-girl.svg',
+        alt: 'Drawing of all Lord of the Rings characters',
+        aspect_ratio: '877/600',
+        width: '590px',
+        custom_class: '',
+    };
+
+    let image2 = {
+        src: 'static/girl-stairs.svg',
+        alt: 'Drawing of all Lord of the Rings characters',
+        aspect_ratio: '765/832',
+        width: '430px',
+        custom_class: '',
+    };
 
     $: if ($user && $user.name) {
         getTasks($user);
-    }
+    };
 
     onMount(async () => {
         auth0Client = await auth.createClient();
@@ -81,6 +96,16 @@
             {/each}
         </ul>
     {/if}
+    {:else}
+    <div in:fly={{ y: -50, duration: 250, delay: 300 }} class="home-layout">
+        <div class="home-layout__top">
+            <h1 class="main-title">An easy to use, intuitive task management app</h1>
+            <ImageLoader picture={image} />
+        </div>
+        <div class="home-layout__bottom">
+            <ImageLoader picture={image2} />
+        </div>
+    </div>
 {/if}
 
 <style type="scss">
@@ -91,13 +116,14 @@
             align-items: center;
             justify-content: center;
             text-align: center;
+            gap: 0 2px;
         }
         &__input {
             width: 100%;
-            max-width: 280px;
+            max-width: 330px;
             border-radius: 8px;
             border: 1px solid var(--color-grey-2);
-            padding: 7px 10px 5px;
+            padding: 10px 11px 8px;
             margin-left: 24px;
             outline: none;
             @media (hover: hover) and (pointer: fine) {
@@ -127,5 +153,74 @@
     }
     .task-list {
         padding: 0;
+    }
+    .main-title {
+        font-size: 60px;
+        max-width: 671px;
+        margin: 0 auto;
+        text-align: center;
+        @media screen and (max-width: 1440px) {
+            font-size: 42px;
+            max-width: 340px;
+        }
+        @media screen and (max-width: 480px) {
+            font-size: 40px;
+        }
+        @media screen and (max-width: 375px) {
+            font-size: 35px;
+        }
+    }
+    .home-layout {
+        margin-top: 80px;
+        @media screen and (max-width: 880px) {
+            margin-top: 220px;
+        }
+        @media screen and (max-width: 480px) {
+            margin-top: 170px;
+        }
+    }
+    .home-layout__top {
+        position: relative;
+        display: flex;
+        align-items: center;
+        @media screen and (max-width: 480px) {
+            margin-bottom: 40px;
+        }
+    }
+    :global(.home-layout__top .aspect-ratio) {
+        position: absolute;
+        right: -125px;
+        top: -125px;
+        @media screen and (max-width: 1440px) {
+            --width: 460px !important;
+        }
+        @media screen and (max-width: 880px) {
+            top: -260px;
+            --width: 410px !important;
+        }
+        @media screen and (max-width: 480px) {
+            margin-bottom: 40px;
+            top: -200px;
+            right: -70px;
+            --width: 290px !important;
+        }
+    }
+    :global(.home-layout__bottom .aspect-ratio) {
+        @media screen and (max-width: 1440px) {
+            --width: 350px !important;
+        }
+        @media screen and (max-width: 880px) {
+            --width: 305px !important;
+        }
+        @media screen and (max-width: 480px) {
+            --width: 225px !important;
+        }
+    }
+    :global(.home-layout .aspect-ratio) {
+        margin-right: auto;
+        width: 100%;
+    }
+    :global(.main-content) {
+        overflow: hidden;
     }
 </style>

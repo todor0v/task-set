@@ -7,7 +7,7 @@
     let timeout = null, preventeDeletionPopup = false, deleteTimeout, showOptions = false, taskCopied = false, taskShared = false;
 
     const deleteData = async () => {
-        preventeDeletionPopup = false;
+        // preventeDeletionPopup = false;
         $tasks = $tasks.filter((t) => t.id !== task.id);
         await fetch(`/todos/${task.id}.json`, {
             method: 'DELETE',
@@ -51,8 +51,8 @@
 
     const deleteTask = (e) => {
         showOptions = false;
-        preventeDeletionPopup = true;
-        deleteTimeout = setTimeout(deleteData, 4000);
+        // preventeDeletionPopup = true;
+        deleteData();
     };
 
     const taskDone = async () => {
@@ -77,7 +77,7 @@
     };
 </script>
 
-<li class="task-list__item" class:hidden={preventeDeletionPopup} in:fly={{ x: 200, duration: 400 }} use:clickOutside on:click_outside={closePopup}>
+<li class="task-list__item" in:fly={{ x: 200, duration: 400 }} use:clickOutside on:click_outside={closePopup}>
     <label for="task_{task.id}" class="check-radio" class:completed={task.completed}>
         <input type="checkbox" class="check-radio__input" tabindex="0" id="task_{task.id}" on:change={(e) => taskDone(e)} />
         <span class="check-radio__element" />
@@ -132,8 +132,8 @@
     <Popup text="Task Copied"/>
 {:else if taskShared}
     <Popup text="Task Shared"/>
-{:else if preventeDeletionPopup}
-    <Popup info_text="Task Deleted" text="Undo" button={true} buttonAction={preventDeletionProcess}/>
+<!-- {:else if preventeDeletionPopup}
+    <Popup info_text="Task Deleted" text="Undo" button={true} buttonAction={preventDeletionProcess}/> -->
 {/if}
 
 <style type="scss">
@@ -211,7 +211,7 @@
             display: flex;
             align-items: center;
             justify-content: flex-start;
-            max-width: 280px;
+            max-width: 330px;
             border: 1px solid var(--color-grey-2);
             padding: 9px;
             border-radius: 14px;

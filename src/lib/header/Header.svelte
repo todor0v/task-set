@@ -79,7 +79,7 @@
 <style type="scss">
     .main-header {
         padding: 10px 0;
-        margin-bottom: 40px;
+        margin-bottom: 80px;
         &__content {
             display: flex;
             align-items: center;
@@ -97,6 +97,7 @@
             position: relative;
         }
         &__link--button {
+            font-size: 20px;
             white-space: nowrap;
             color: var(--color-grey-1);
             cursor: pointer;
@@ -139,28 +140,31 @@
         text-decoration: none;
         .icon {
             flex-shrink: 0;
-            width: 44px;
-            height: 44px;
+            width: 55px;
+            height: 55px;
+            margin-left: -5px;
         }
         &__text {
             color: var(--color-grey-1);
             margin-left: 2px;
+            font-size: 20px;
+            margin-top: 5px;
         }
     }
     .user {
         border-radius: 50%;
         border: 2px solid var(--color-grey-1);
         overflow: hidden;
-        width: 30px;
-        height: 30px;
+        width: 40px;
+        height: 40px;
         display: flex;
         justify-content: center;
         align-items: flex-end;
         cursor: pointer;
         &__icon {
-            width: 30px;
-            height: 30px;
-            margin-bottom: -4px;
+            width: 40px;
+            height: 40px;
+            margin-bottom: -7px;
             circle,
             path {
                 stroke: var(--color-grey-1);
